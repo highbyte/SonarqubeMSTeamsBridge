@@ -3,7 +3,7 @@
 ## What
 Allows Sonarqube scan results to be shown in a MS Teams channel.
 
-<img src="doc/MSTeams_cards.png" width="50%" height="50%" title="MS Teams card example">
+<img src="doc/MSTeams_cards.png" width="75%" height="75%" title="MS Teams card example">
 
 ## How
 An Azure Function written in .NET Core v3 (C#) that processes incoming Sonarqube Webhook requests, and transforms them to a MS Teams "card" that is then sent to a MS Teams channel via a MS Teams Webhook.
@@ -109,7 +109,7 @@ az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resourc
   * URL: _The Azure Function invoke URL created above_
   * Secret: _A strong secret password_
 
-<img src="doc/Sonarqube_Webhook.png" width="50%" height="50%" title="Sonarqube Webhook configuration">
+<img src="doc/Sonarqube_Webhook.png" width="75%" height="75%" title="Sonarqube Webhook configuration">
 
 ## Running locally in VS Code
 TODO
