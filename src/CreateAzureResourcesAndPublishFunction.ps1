@@ -16,7 +16,7 @@
 # -----------------------------------------------------
 # Azure CLI (az) and Azure Function Core Tools (func) must have been installed for script below to work. 
 #   Azure CLI:                  https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest
-#   Azure Functions Core tools: https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local
+#   Azure Functions Core Tools: https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local
 
 # -----------------------------------------------------
 # Script settings
@@ -27,14 +27,14 @@
 $teamsWebhookUrl = "--MS Teams channel Webhook URL goes here--"
 
 # Change to desired Azure region here. 
-# Examples: westeurope, northeurope
-$region="--Azure region goes here--"
+# Examples: westeurope, northeurope, eastus, westus, etc.
+$region          = "--Azure region goes here--"
 
 # Change Azure resource names below if you want your own names.
 # Note: Function app and storage account names must be unique across Azure
-$resourceGroup="rg-sqteamsbridge"
-$storageName="stsqteamsbridge$(Get-Random -Max 32767)"
-$functionAppName="func-sqteamsbridge$(Get-Random -Max 32767)"
+$resourceGroup   = "rg-sqteamsbridge"
+$storageName     = "stsqteamsbridge$(Get-Random -Max 32767)"
+$functionAppName = "func-sqteamsbridge$(Get-Random -Max 32767)"
 
 # -----------------------------------------------------
 # Create Azure Resources
