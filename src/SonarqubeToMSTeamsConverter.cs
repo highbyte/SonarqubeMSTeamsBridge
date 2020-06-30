@@ -35,7 +35,8 @@ namespace Highbyte.AzureFunctions
             string themeColor;
             string qualityGateResultText;
             System.Uri activityImage;
-            switch(qualityGateStatus) 
+
+            switch(qualityGateStatus.ToUpper()) 
             {
                 case "SUCCESS":
                     themeColor="00FF00";    // Green
