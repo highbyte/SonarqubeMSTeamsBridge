@@ -5,6 +5,9 @@ namespace Highbyte.AzureFunctions
 {
     public class SonarqubeToMSTeamsConvert: ISonarqubeToMSTeamsConvert
     {
+        private System.Uri activityImageSuccess = new  System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flat_tick_icon.svg/200px-Flat_tick_icon.svg.png");
+        private System.Uri activityImageFailure = new  System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Dialog-error.svg/200px-Dialog-error.svg.png");
+        private System.Uri activityImageInconclusive = new  System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Emblem-question-yellow.svg/200px-Emblem-question-yellow.svg.png");
 
         public MSTeamsComplexCard ToComplexCard(dynamic data)
         {
@@ -31,24 +34,25 @@ namespace Highbyte.AzureFunctions
 
             string themeColor;
             string qualityGateResultText;
+            System.Uri activityImage;
             switch(qualityGateStatus) 
             {
                 case "SUCCESS":
-                    themeColor="00FF00";
+                    themeColor="00FF00";    // Green
                     qualityGateResultText = "succeeded";
+                    activityImage = activityImageSuccess;
                     break;
                 case "ERROR": 
-                    themeColor="FF0000";
+                    themeColor="FF0000";    // Red
                     qualityGateResultText = "_failed_";
+                    activityImage = activityImageFailure;
                     break;
                 default:    // Unkown quality gate status
-                    themeColor="FFFF00";
+                    themeColor="FFFF00";    // Yellow
                     qualityGateResultText = "was inconclusive";
+                    activityImage = activityImageInconclusive;
                     break;
             }
-
-            // TODO: Find better URL to official Sonarqube logo. See https://www.sonarqube.org/logos/
-            System.Uri activityImage = new  System.Uri("https://pbs.twimg.com/profile_images/1224335491899760641/h404B5dU_400x400.jpg");
 
             // Links for message card format and testing
             // https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using
