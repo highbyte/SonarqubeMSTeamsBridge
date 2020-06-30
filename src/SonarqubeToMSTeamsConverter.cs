@@ -5,9 +5,9 @@ namespace Highbyte.AzureFunctions
 {
     public class SonarqubeToMSTeamsConvert: ISonarqubeToMSTeamsConvert
     {
-        private System.Uri activityImageSuccess = new  System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flat_tick_icon.svg/200px-Flat_tick_icon.svg.png");
-        private System.Uri activityImageFailure = new  System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Dialog-error.svg/200px-Dialog-error.svg.png");
-        private System.Uri activityImageInconclusive = new  System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Emblem-question-yellow.svg/200px-Emblem-question-yellow.svg.png");
+        private System.Uri activityImageSuccess = new System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flat_tick_icon.svg/200px-Flat_tick_icon.svg.png");
+        private System.Uri activityImageFailure = new System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Dialog-error.svg/200px-Dialog-error.svg.png");
+        private System.Uri activityImageInconclusive = new System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Emblem-question-yellow.svg/200px-Emblem-question-yellow.svg.png");
 
         public MSTeamsComplexCard ToComplexCard(dynamic data)
         {

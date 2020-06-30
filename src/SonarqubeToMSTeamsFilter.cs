@@ -5,16 +5,14 @@ namespace Highbyte.AzureFunctions
 {
     public class SonarqubeToMSTeamsFilter: ISonarqubeToMSTeamsFilter
     {
-        public bool ShouldProcess(dynamic data) 
+        public bool ShouldProcess(dynamic data, string qualityGateStatusExcludes) 
         {
-            bool allowedQualityGateStatus = AllowedQualityGateStatus(data);
+            bool allowedQualityGateStatus = AllowedQualityGateStatus(data, qualityGateStatusExcludes);
             return allowedQualityGateStatus;
         }
 
-        public bool AllowedQualityGateStatus(dynamic data)
+        public bool AllowedQualityGateStatus(dynamic data, string qualityGateStatusExcludes)
         {
-            // Setting QualityGateStatusExcludeList is a comma separated list of Sonarqube Quality Status values that should be ignored.
-            var qualityGateStatusExcludes = Environment.GetEnvironmentVariable("QualityGateStatusExcludeList", EnvironmentVariableTarget.Process);
             // If not specifying any Quality Gate Status exclude filter, allow any status.
             if(string.IsNullOrEmpty(qualityGateStatusExcludes))
                 return true;
