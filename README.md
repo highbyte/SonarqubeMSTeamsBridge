@@ -113,3 +113,9 @@ az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resourc
 
 ## Running locally in VS Code
 TODO
+
+# Credits
+Images
+* <a href="https://commons.wikimedia.org/wiki/File:Flat_tick_icon.svg" title="via Wikimedia Commons">Fabián Alexis, cropped by Prenn</a> / <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA</a>
+* <a href="https://commons.wikimedia.org/wiki/File:Dialog-error.svg" title="via Wikimedia Commons">Rodney Dawes, Jakub Steiner, Garrett LeSage</a> / Public domain
+* <a href="https://commons.wikimedia.org/wiki/File:Emblem-question-yellow.svg" title="via Wikimedia Commons">penubag and the people from the Tango project</a> / Public domain
