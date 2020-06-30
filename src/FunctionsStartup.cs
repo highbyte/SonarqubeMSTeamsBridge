@@ -17,6 +17,7 @@ namespace Highbyte.Functions
             // });
 
             builder.Services.AddSingleton<ISonarqubeToMSTeamsConvert, SonarqubeToMSTeamsConvert>();
+            builder.Services.AddSingleton<ISonarqubeToMSTeamsFilter, SonarqubeToMSTeamsFilter>();
         }
     }
 }
