@@ -14,6 +14,11 @@ namespace Highbyte.AzureFunctions
 {
     public class SonarqubeMSTeamsBridge
     {
+        const string Setting_TeamsWebhookUrl = "TeamsWebhookUrl";
+        const string Setting_SonarqubeWebhookSecret = "SonarqubeWebhookSecret";
+        const string Setting_QualityGateStatusExcludeList = "QualityGateStatusExcludeList";
+        
+
         // TODO: Inject HttpClient via Azure Function DI. Use .NET Core extension for providing HttpClient correctly (singleton)
         private static readonly HttpClient _httpClient = new HttpClient();
         private readonly ISonarqubeToMSTeamsConvert _sonarqubeToMSTeamsConvert;
@@ -33,29 +38,61 @@ namespace Highbyte.AzureFunctions
         {
             log.LogInformation("Request received from Sonarqube webhook.");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            // ----------------------------------------------------
+            // Get and validate config settings
+            // ----------------------------------------------------
+            // Required setting: SonarqubeWebhookSecret. Contains the Sonarqube Webhook secret. It's the same secret that was configured in the Sonarqube Webhook.
+            string sonarqubeWebhookSecret = Environment.GetEnvironmentVariable(Setting_SonarqubeWebhookSecret, EnvironmentVariableTarget.Process);
+            if(string.IsNullOrEmpty(sonarqubeWebhookSecret))
+            {
+                log.LogError($"Required setting {Setting_SonarqubeWebhookSecret} is missing.");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            // Required setting: TeamsWebhookUrl
+            var teamsWebhookUrl = Environment.GetEnvironmentVariable(Setting_TeamsWebhookUrl, EnvironmentVariableTarget.Process);
+            if(string.IsNullOrEmpty(teamsWebhookUrl))
+            {
+                log.LogError($"Required setting {Setting_TeamsWebhookUrl} is missing.");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            // Optional setting: QualityGateStatusExcludeList. A comma separated list of Sonarqube Quality Status values that should be ignored.
+            var qualityGateStatusExcludes = Environment.GetEnvironmentVariable(Setting_QualityGateStatusExcludeList, EnvironmentVariableTarget.Process);
 
+            // ----------------------------------------------------
+            // Validate signature in http header
+            // ----------------------------------------------------
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            if(!SonarqubeSecretValidator.IsValidSignature(req, requestBody, sonarqubeWebhookSecret))
+            {
+                log.LogWarning($"Sonarqube secret http header is missing or not valid. Config setting {Setting_SonarqubeWebhookSecret} must match secret in Sonarqube Webhook.");
+                return new UnauthorizedResult();
+            }
+
+            // ----------------------------------------------------
             // Check if a card should be sent to MS Teams or not.
-            if(!_sonarqubeToMSTeamsFilter.ShouldProcess(data)) 
+            // ----------------------------------------------------
+            dynamic sonarqubeRequestJson = JsonConvert.DeserializeObject(requestBody);
+
+            if(!_sonarqubeToMSTeamsFilter.ShouldProcess(sonarqubeRequestJson, qualityGateStatusExcludes)) 
             {
                 log.LogInformation($"Message was not sent to MS Teams due to filter.");
                 return new OkResult();
             }
 
+            // ----------------------------------------------------
             // Build MS Teams card from Sonarqube Webhook data 
-            //var msTeamsCard = _sonarqubeToMSTeamsConvert.ToSimpleCard(data);
-            var msTeamsCard = _sonarqubeToMSTeamsConvert.ToComplexCard(data);
+            // ----------------------------------------------------
+            //var msTeamsCard = _sonarqubeToMSTeamsConvert.ToSimpleCard(sonarqubeRequestJson);
+            var msTeamsCard = _sonarqubeToMSTeamsConvert.ToComplexCard(sonarqubeRequestJson);
 
-            // Serialize MS Teams card to JSON
-            var teamsCardContent = new StringContent(JsonConvert.SerializeObject(msTeamsCard), Encoding.UTF8, "application/json");
-
+            // ----------------------------------------------------
             // Send message to MS Teams webhook url
-            var teamsWebhookUrl = Environment.GetEnvironmentVariable("TeamsWebhookUrl", EnvironmentVariableTarget.Process);
+            // ----------------------------------------------------
             log.LogInformation($"Sending request to MS Teams webhook URL: {teamsWebhookUrl}");
+            var teamsCardContent = new StringContent(JsonConvert.SerializeObject(msTeamsCard), Encoding.UTF8, "application/json");
             await _httpClient.PostAsync(teamsWebhookUrl, teamsCardContent);
-            log.LogInformation("Request successfully sent to MS Teams webhook.");
 
+            log.LogInformation("Request successfully sent to MS Teams webhook.");
             return new OkResult();
         }
 
