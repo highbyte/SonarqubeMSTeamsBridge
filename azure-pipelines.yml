@@ -1,0 +1,27 @@
+# Starter pipeline
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud (Highbyte)'
+    organization: 'highbyte'
+    scannerMode: 'MSBuild'
+    projectKey: 'highbyte_SonarqubeMSTeamsBridge'
+    projectName: 'SonarqubeMSTeamsBridge'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    workingDirectory: 'src'
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
+#- task: SonarCloudAnalyze@1
