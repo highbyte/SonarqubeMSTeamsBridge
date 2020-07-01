@@ -20,8 +20,10 @@ steps:
   inputs:
     command: 'build'
     workingDirectory: 'src'
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
+- task: SonarCloudAnalyze@1
 
-#- task: SonarCloudAnalyze@1
+# - task: SonarCloudPublish@1
+#   inputs:
+#     pollingTimeoutSec: '300'
+
+
