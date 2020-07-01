@@ -1,5 +1,7 @@
 # Sonarqube MS Teams Bridge
 
+![Build .NET Core](https://github.com/highbyte/SonarqubeMSTeamsBridge/workflows/Build%20.NET%20Core/badge.svg)
+
 ## What
 Allows Sonarqube scan results to be shown in a MS Teams channel.
 
@@ -75,7 +77,7 @@ func-sqteamsbridgeXXXXX  rg-sqteamsbridge  westeurope   Microsoft.Web/sites
 ```
 
 #### Function settings
-Azure Function settings can be set via script. Change Azure resource names and values. Read [here](#azure-function-settings) about how about each setting.
+Azure Function settings can be set via script. Change Azure resource names and values. Read [here](#azure-function-settings) about each setting.
 
 Required settings
 ``` powershell
@@ -116,7 +118,7 @@ Open the newly created Azure Function resource (type App Service):
 
 <img src="doc/AzureFunction_Settings.png" width="75%" height="75%" title="Azure Function settings">
 
-Read [here](#azure-function-settings) about how about each setting.
+Read [here](#azure-function-settings) about each setting.
 
 #### Azure Function Invocation URL
 To get the URL to the new Azure Function, open the newly created Azure Function resource (type App Service):
