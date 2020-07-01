@@ -4,12 +4,6 @@
 # -----------------------------------------------------
 # 1. Create Azure Function resource
 # 2. Publish Azure Function HttpTrigger (written in C#) to the Azure Function resource
-# 3. Set Azure Function application setting for MS Teams Webhook URL
-
-# Alternative to running this script is to use Azure Portal
-# - Create Azure Function resource
-# - Create a Function with Http Trigger in the Azure Function resource, copy/paste source code from SonarqubeMSTeamsBridge.cs
-# - Set Azure Function application setting TeamsWebhookUrl
 
 # -----------------------------------------------------
 # Script requirements

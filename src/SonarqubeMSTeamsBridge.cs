@@ -17,6 +17,9 @@ namespace Highbyte.AzureFunctions
         const string Setting_TeamsWebhookUrl = "TeamsWebhookUrl";
         const string Setting_SonarqubeWebhookSecret = "SonarqubeWebhookSecret";
         const string Setting_QualityGateStatusExcludeList = "QualityGateStatusExcludeList";
+        const string Setting_Culture = "Culture";
+        const string Setting_DisableAuthentication = "DisableAuthentication";
+        
         
 
         // TODO: Inject HttpClient via Azure Function DI. Use .NET Core extension for providing HttpClient correctly (singleton)
@@ -55,14 +58,22 @@ namespace Highbyte.AzureFunctions
                 log.LogError($"Required setting {Setting_TeamsWebhookUrl} is missing.");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+
             // Optional setting: QualityGateStatusExcludeList. A comma separated list of Sonarqube Quality Status values that should be ignored.
             var qualityGateStatusExcludes = Environment.GetEnvironmentVariable(Setting_QualityGateStatusExcludeList, EnvironmentVariableTarget.Process);
+
+            // Optional setting: Culture. Affects displayed Date/time values in MS Teams card. Examples: en-US, sv-SE. If not specified, dates/times are displayed as received from Sonarqube
+            var culture = Environment.GetEnvironmentVariable(Setting_Culture, EnvironmentVariableTarget.Process);
+
+            // Optional setting: DisableAuthentication. Disables validation of Sonarqube Webhook secret. Use for local development only!
+            var disableAuthenticationString = Environment.GetEnvironmentVariable(Setting_DisableAuthentication, EnvironmentVariableTarget.Process);
+            bool disableAuthentication = !string.IsNullOrEmpty(disableAuthenticationString) && disableAuthenticationString.Equals("true",  StringComparison.CurrentCultureIgnoreCase);
 
             // ----------------------------------------------------
             // Validate signature in http header
             // ----------------------------------------------------
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            if(!SonarqubeSecretValidator.IsValidSignature(req, requestBody, sonarqubeWebhookSecret))
+            if(!disableAuthentication && !SonarqubeSecretValidator.IsValidSignature(req, requestBody, sonarqubeWebhookSecret))
             {
                 log.LogWarning($"Sonarqube secret http header is missing or not valid. Config setting {Setting_SonarqubeWebhookSecret} must match secret in Sonarqube Webhook.");
                 return new UnauthorizedResult();
@@ -83,7 +94,7 @@ namespace Highbyte.AzureFunctions
             // Build MS Teams card from Sonarqube Webhook data 
             // ----------------------------------------------------
             //var msTeamsCard = _sonarqubeToMSTeamsConvert.ToSimpleCard(sonarqubeRequestJson);
-            var msTeamsCard = _sonarqubeToMSTeamsConvert.ToComplexCard(sonarqubeRequestJson);
+            var msTeamsCard = _sonarqubeToMSTeamsConvert.ToComplexCard(sonarqubeRequestJson, culture);
 
             // ----------------------------------------------------
             // Send message to MS Teams webhook url

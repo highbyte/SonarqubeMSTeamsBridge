@@ -9,15 +9,22 @@ namespace Highbyte.AzureFunctions
         private System.Uri activityImageFailure = new System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Dialog-error.svg/200px-Dialog-error.svg.png");
         private System.Uri activityImageInconclusive = new System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Emblem-question-yellow.svg/200px-Emblem-question-yellow.svg.png");
 
-        public MSTeamsComplexCard ToComplexCard(dynamic data)
+        public MSTeamsComplexCard ToComplexCard(dynamic data, string culture)
         {
             string taskStatus = data.status;                         // SUCCESS, IN_PROGRESS (should never occur in webhook?)
 
             string analyzedAtString;
             if(data.analysedAt.Value.GetType() == typeof(DateTime))
             {
-                CultureInfo culture = new CultureInfo("sv-SE");
-                analyzedAtString = data.analysedAt.Value.ToString("G", culture);  // "G" = General date/time pattern (long time), depending on culture. Examples: 2020-06-29 13:37, 6/29/2020 1:37 PM
+                if(string.IsNullOrEmpty(culture)) 
+                {
+                    analyzedAtString = data.analysedAt.Value.ToString("G");  // "G" = General date/time pattern (long time), formatted as default. Example: 6/29/2020 1:37 PM
+                }
+                else 
+                {
+                    CultureInfo cultureInfo = new CultureInfo(culture);
+                    analyzedAtString = data.analysedAt.Value.ToString("G", cultureInfo);  // "G" = General date/time pattern (long time), formated depending on culture. Examples: 2020-06-29 13:37, 6/29/2020 1:37 PM
+                }
             }
             else
             {
