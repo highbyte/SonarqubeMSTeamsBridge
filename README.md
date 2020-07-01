@@ -86,6 +86,7 @@ az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resourc
 Optional settings
 ``` powershell
 az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "QualityGateStatusExcludeList=SUCCESS"
+az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "Culture=en-US"
 ```
 
 ### Manual Azure deployment
@@ -133,6 +134,8 @@ The Azure Function uses the following settings from environment variables.
 | TeamsWebhookUrl |  Yes | _n/a_ | The Webhook URL that is configured in MS Teams for your channel where messages will be sent to. Read [here](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) for details on how to set it up. |
 | SonarqubeWebhookSecret | Yes | _n/a_ | The Sonarqube Webhook secret. It's used to authenticate requests from Sonarqube. It should be the same secret configured in [Sonarqube](#configure-sonarqube) |
 | QualityGateStatusExcludeList | No | _Not set, empty string_ | A comma-separated list of Sonarqube Quality Gate status values that should not be sent to MS Teams. By default this is not set, and means you will get MS Teams messages for both succeed and failed scans. If you only want failed scans, then you should set this value to SUCCESS |
+| Culture | No | _Not set, empty string_ | A .NET culture code that is used format Date/Time values in MS Teams card. If not specified, default .NET formating is used. Examples of codes: en-US, de-DE, sv-SE, es-ES |
+| DisableAuthentication | No | _Not set, false_ | Set to true to disable Sonarqube Webhook authentication. Secret will not be validated. _Warning! Should only be used in development_
 
 
 ## Configure Sonarqube
