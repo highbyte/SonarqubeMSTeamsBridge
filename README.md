@@ -6,7 +6,7 @@ Allows Sonarqube scan results to be shown in a MS Teams channel.
 <img src="doc/MSTeams_cards.png" width="75%" height="75%" title="MS Teams card example">
 
 ## How
-An Azure Function written in .NET Core v3 (C#) that processes incoming Sonarqube Webhook requests, and transforms them to a MS Teams "card" that is then sent to a MS Teams channel via a MS Teams Webhook.
+An Azure Function written in .NET Core v3.1 (C#) that processes incoming Sonarqube Webhook requests, and transforms them to a MS Teams "card" that is then sent to a MS Teams channel via a MS Teams Webhook.
 
 Tested with (it way work for other versions)
 * Sonarqube (Community) v8.3.1.34397
@@ -75,7 +75,7 @@ func-sqteamsbridgeXXXXX  rg-sqteamsbridge  westeurope   Microsoft.Web/sites
 ```
 
 #### Function settings
-Azure Function settings can be set via script. Change Azure resource names and values. Look [here](#azure-function-settings) for settings description.
+Azure Function settings can be set via script. Change Azure resource names and values. Read [here](#azure-function-settings) about how about each setting.
 
 Required settings
 ``` powershell
@@ -88,14 +88,42 @@ Optional settings
 az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "QualityGateStatusExcludeList=SUCCESS"
 ```
 
-### Manual deployment
-TODO
+### Manual Azure deployment
 
-#### Function settings
-You can see/change settings in the Azure Portal. Look [here](#azure-function-settings) for settings description.
+As an alternative to deployment via script (as described above), Visual Studio Code can be used to deploy this code to Azure Functions.
+
+* Install "Azure Functions Core Tools": https://github.com/Azure/azure-functions-core-tools#installing
+* Install Visual Studio Code extension "Azure Functions": https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions
+* Clone this repo locally and open in Visual Studio Code
+* Use the UI button "Deploy to Function App" from the extension "Azure Functions" (see extension doc above)
+  * Select Function App in Azure: **Create new Function App in Azure... Advanced** _(or use an existing Function App if you like)_
+  * Enter a globally unique name for the function app. _(will used in host name [function app name].azurewebsites.net)_
+  * Select Runtime: **.NET Core 3.1**
+  * Select an OS: **Windows** _(Linux probably also works, but not tested)_
+  * Select a hosting plan: _Refer to Microsoft [documentation](https://azure.microsoft.com/en-us/pricing/details/functions/) about this. The simplest is Consumption_
+  * Select a resource group for new resources: _Create a new resource group, or use an exisiting, it's up to you._
+  * Select a storage account: _Create a new storage account, or use an exisiting, it's up to you._
+  * Select an Application Insights resource for your app: _Create a new Application Insights resource, or use an exisiting, o Skip if you don't logging. It's up to you._
+
+
+#### Manual Function settings
+After the necessary Azure Resources for the Function has been created from Visual Studio Code above, you can manage the Function settings in the Azure Portal. 
+
+Open the newly created Azure Function resource (type App Service):
+* Select Configuration
+* Add each required setting via + New application setting
 
 <img src="doc/AzureFunction_Settings.png" width="75%" height="75%" title="Azure Function settings">
 
+Read [here](#azure-function-settings) about how about each setting.
+
+#### Azure Function Invocation URL
+To get the URL to the new Azure Function, open the newly created Azure Function resource (type App Service):
+* Select Functions
+* Select SonarqubeMSTeamsBridge
+* Press "Get Function Url" button.
+
+**This is the address that should be configured in Sonarqube as a Webhook URL as described [here](#configure-sonarqube).**
 
 ## Azure Function settings
 The Azure Function uses the following settings from environment variables.
