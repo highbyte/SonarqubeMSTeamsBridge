@@ -1,5 +1,7 @@
 # Sonarqube MS Teams Bridge
 
+![Build .NET Core](https://github.com/highbyte/SonarqubeMSTeamsBridge/workflows/Build%20.NET%20Core/badge.svg)
+
 ## What
 Allows Sonarqube scan results to be shown in a MS Teams channel.
 
