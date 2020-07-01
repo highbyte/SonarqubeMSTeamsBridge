@@ -75,7 +75,7 @@ func-sqteamsbridgeXXXXX  rg-sqteamsbridge  westeurope   Microsoft.Web/sites
 ```
 
 #### Function settings
-Azure Function settings can be set via script. Change Azure resource names and values. Look [here](#azure-unction-settings) for settings description.
+Azure Function settings can be set via script. Change Azure resource names and values. Look [here](#azure-function-settings) for settings description.
 
 Required settings
 ``` powershell
@@ -92,7 +92,7 @@ az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resourc
 TODO
 
 #### Function settings
-You can see/change settings in the Azure Portal. Look [here](#azure-unction-settings) for settings description.
+You can see/change settings in the Azure Portal. Look [here](#azure-function-settings) for settings description.
 
 <img src="doc/AzureFunction_Settings.png" width="75%" height="75%" title="Azure Function settings">
 
