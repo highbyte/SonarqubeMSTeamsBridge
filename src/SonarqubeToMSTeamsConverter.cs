@@ -36,7 +36,7 @@ namespace Highbyte.AzureFunctions
             string projectKey = data.project.key;
             string projectUrl = data.project.url;
 
-            string qualityGateStatus = data.qualityGate.status;     // SUCCESS, ERROR
+            string qualityGateStatus = data.qualityGate.status;     // OK, ERROR
             string qualityGateName = data.qualityGate.name;         // Sonar way, etc
 
             string themeColor;
@@ -45,7 +45,7 @@ namespace Highbyte.AzureFunctions
 
             switch(qualityGateStatus.ToUpper()) 
             {
-                case "SUCCESS":
+                case "OK":
                     themeColor="00FF00";    // Green
                     qualityGateResultText = "succeeded";
                     activityImage = activityImageSuccess;
