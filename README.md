@@ -56,8 +56,8 @@ cd src
 .\CreateAzureResourcesAndPublishFunction.ps1
 ```
 
-When the script has completed, it will output the Invoke url of the Azure Function. 
-**This is the address that should be configured in Sonarqube as a Webhook.**
+When the script has completed, it will output the **Invoke url** of the Azure Function. 
+**This is the address that should be configured in Sonarqube as a Webhook URL as described [here](#configure-sonarqube).**
 ```
 Functions in func-sqteamsbridgeXXXXX:
     SonarqubeMSTeamsBridge - [httpTrigger]
@@ -103,7 +103,7 @@ The Azure Function uses the following settings from environment variables.
 | Setting | Required| Default value | Description |
 | --- | --- | --- | --- |
 | TeamsWebhookUrl |  Yes | _n/a_ | The Webhook URL that is configured in MS Teams for your channel where messages will be sent to. Read [here](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) for details on how to set it up. |
-| SonarqubeWebhookSecret | Yes | _n/a_ | The Sonarqube Webhook secret. It's used to authenticate requests from Sonarqube |
+| SonarqubeWebhookSecret | Yes | _n/a_ | The Sonarqube Webhook secret. It's used to authenticate requests from Sonarqube. It should be the same secret configured in [Sonarqube](#configure-sonarqube) |
 | QualityGateStatusExcludeList | No | _Not set, empty string_ | A comma-separated list of Sonarqube Quality Gate status values that should not be sent to MS Teams. By default this is not set, and means you will get MS Teams messages for both succeed and failed scans. If you only want failed scans, then you should set this value to SUCCESS |
 
 
