@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <!-- SonarQube scanner (MSBuild) needs ProjectGuid -->
+    <ProjectGuid>E5AD7069-DEE8-4623-B755-DE650D6D96D8</ProjectGuid> 
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
