@@ -21,11 +21,6 @@
 # -----------------------------------------------------
 # Script settings
 # -----------------------------------------------------
-# Get MS Teams channel Webhook URL.
-# 1. Enable Incoming Webhook for the channel you want Sonarqube analysis results to be sent to.
-# 2. Copy the Webhook URL.
-$teamsWebhookUrl = "--MS Teams channel Webhook URL goes here--"
-
 # Change to desired Azure region here. 
 # Examples: westeurope, northeurope, eastus, westus, etc.
 $region          = "--Azure region goes here--"
@@ -57,16 +52,6 @@ az functionapp create `
   --consumption-plan-location $region `
   --resource-group $resourceGroup `
   --functions-version 3
-
-# -----------------------------------------------------
-# Set Azure Function setting TeamsWebhookUrl
-# -----------------------------------------------------
-# List current settings
-#az functionapp config appsettings list --name $functionAppName --resource-group $resourceGroup --output table
-
-# Change setting
-az functionapp config appsettings set --name $functionAppName --resource-group $resourceGroup --settings "TeamsWebhookUrl=$teamsWebhookUrl"
-
 
 # -----------------------------------------------------
 # Publish Azure Function application
