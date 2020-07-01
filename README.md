@@ -18,7 +18,7 @@ There was no Sonarqube plugin for integration with MS Teams when I checked. As I
 ## Deployment to Azure
 You deploy this Azure Function to your own Azure Subscription.
 
-### Via script
+### Deployment via script
 There is a provided Powershell script ([src/CreateAzureResourcesAndPublishFunction.ps1](src/CreateAzureResourcesAndPublishFunction.ps1)) that creates necessary Azure resources, and compiles/uploads the Azure function project in this repository.
 
 The Powershell script requires the following command line tools to be installed on the machine you run it from
@@ -37,17 +37,13 @@ az account set --subscription [your_subscription_id_or_name_here]
 
 #### Change script variables
 Before running the script, you need to edit the script and set the following variables.
-* MS Teams Webhook URL for your channel. Look [here](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) on details on how to set it up.
-``` powershell
-$teamsWebhookUrl = "https://outlook.office.com/webhook/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx@xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/IncomingWebhook/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-```
 
 * The Azure region where the Azure function (and related resources) will be deployed to.
 ``` powershell
 $region          = "westeurope"
 ```
 
-Optionally you can also change the name of the Azure Resource group and other resources that are created. Note that Function app and storage account names must be unique across Azure.
+* Optionally you can also change the name of the Azure Resource group and other resources that are created. Note that Function app and storage account names must be unique across Azure.
 ``` powershell
 $resourceGroup   = "rg-sqteamsbridge"
 $storageName     = "stsqteamsbridge$(Get-Random -Max 32767)"
@@ -78,30 +74,38 @@ WestEuropePlan           rg-sqteamsbridge  westeurope   Microsoft.Web/serverFarm
 func-sqteamsbridgeXXXXX  rg-sqteamsbridge  westeurope   Microsoft.Web/sites
 ```
 
-### Manually
+#### Function settings
+Azure Function settings can be set via script. Change Azure resource names and values. See (#azure-unction-settings) for settings description.
+
+Required settings
+``` powershell
+az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "TeamsWebhookUrl=https://outlook.office.com/webhook/XXXX"
+az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "SonarqubeWebhookSecret=MY_SECRET"
+```
+
+Optional settings
+``` powershell
+az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "QualityGateStatusExcludeList=SUCCESS"
+```
+
+### Manual deployment
 TODO
+
+#### Function settings
+You can see/change settings in the Azure Portal. See (#azure-unction-settings) for settings description.
+
+<img src="doc/AzureFunction_Settings.png" width="75%" height="75%" title="Azure Function settings">
+
 
 ## Azure Function settings
 The Azure Function uses the following settings from environment variables.
 
 | Setting | Required| Default value | Description |
 | --- | --- | --- | --- |
-| TeamsWebhookUrl |  Yes | _n/a_ | The Webhook URL that is configured in MS Teams for your channel where messages will be sent to |
+| TeamsWebhookUrl |  Yes | _n/a_ | The Webhook URL that is configured in MS Teams for your channel where messages will be sent to. Read [here](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) for details on how to set it up. |
 | SonarqubeWebhookSecret | Yes | _n/a_ | The Sonarqube Webhook secret. It's used to authenticate requests from Sonarqube |
 | QualityGateStatusExcludeList | No | _Not set, empty string_ | A comma-separated list of Sonarqube Quality Gate status values that should not be sent to MS Teams. By default this is not set, and means you will get MS Teams messages for both succeed and failed scans. If you only want failed scans, then you should set this value to SUCCESS |
 
-You can see/change settings in the Azure Portal
-
-<img src="doc/AzureFunction_Settings.png" width="75%" height="75%" title="Azure Function settings">
-
-Or change settings via script. Note if you did run the deployment script, the setting TeamsWebhookUrl was set automatically. Other setting(s) are optional.
-
-_Example script (change Azure resource names and setting values)_
-``` powershell
-az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "TeamsWebhookUrl=https://outlook.office.com/webhook/XXXX"
-az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "SonarqubeWebhookSecret=MY_SECRET"
-az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "QualityGateStatusExcludeList=SUCCESS"
-```
 
 ## Configure Sonarqube
 * Login as administrator in Sonarqube portal
