@@ -1,4 +1,4 @@
-name: Azure Function .NET Core project
+name: Build .NET Core
 
 on:
   push:
