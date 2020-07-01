@@ -1,6 +1,7 @@
 # Sonarqube MS Teams Bridge
 
 ![Build .NET Core](https://github.com/highbyte/SonarqubeMSTeamsBridge/workflows/Build%20.NET%20Core/badge.svg)
+[![SonarCloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=alert_status)](https://sonarcloud.io/dashboard?id=highbyte_SonarqubeMSTeamsBridge) [![SonarCloud Security Rating](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=security_rating)](https://sonarcloud.io/dashboard?id=030_n3dr) [![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=vulnerabilities)](https://sonarcloud.io/project/issues?id=highbyte_SonarqubeMSTeamsBridge&resolved=false&types=VULNERABILITY) [![SonarCloud Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=highbyte_SonarqubeMSTeamsBridge) [![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=bugs)](https://sonarcloud.io/project/issues?id=highbyte_SonarqubeMSTeamsBridge&resolved=false&types=BUG)
 
 ## What
 Allows Sonarqube scan results to be shown in a MS Teams channel.
