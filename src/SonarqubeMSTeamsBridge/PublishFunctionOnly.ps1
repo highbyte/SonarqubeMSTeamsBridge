@@ -16,8 +16,9 @@ param ($functionAppName)
 # -----------------------------------------------------
 # How to run script
 # -----------------------------------------------------
-# Send Azure resource names below to match your existing resources in the parameters to the script.
-# Example: .\PublishFunctionOnly.ps1 -functionAppName "func-sqteamsbridge5678"
+# Set new or existing Azure Function app name.
+# Example: 
+# .\PublishFunctionOnly.ps1 -functionAppName "func-sqteamsbridge5678"
 
 # -----------------------------------------------------
 # Publish Azure Function application
