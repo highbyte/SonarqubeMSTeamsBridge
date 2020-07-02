@@ -22,7 +22,7 @@ There was no Sonarqube plugin for integration with MS Teams when I checked. As I
 You deploy this Azure Function to your own Azure Subscription.
 
 ### Deployment via script
-There is a provided Powershell script ([src/CreateAzureResourcesAndPublishFunction.ps1](src/CreateAzureResourcesAndPublishFunction.ps1)) that creates necessary Azure resources, and compiles/uploads the Azure function project in this repository.
+There is a provided Powershell script ([src/SonarqubeMSTeamsBridge/CreateAzureResourcesAndPublishFunction.ps1](src/SonarqubeMSTeamsBridge/CreateAzureResourcesAndPublishFunction.ps1)) that creates necessary Azure resources, and compiles/uploads the Azure function project in this repository.
 
 The Powershell script requires the following command line tools to be installed on the machine you run it from
 * [Azure CLI (az)](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest)
@@ -38,25 +38,19 @@ az login
 az account set --subscription [your_subscription_id_or_name_here] 
 ```
 
-#### Change script variables
-Before running the script, you need to edit the script and set the following variables.
+#### Script parameters
+When running the script, you need to provide the following parameters
+* **region**: _Code for region where resources will be created. Example: "westus", "eastus", "northeurope", "westeurope"._
+* **resourceGroup**: _Name of Resource Group that will be created._
+* **storageName**: _Name of Storage Account that will be created. Note: name must be unique in all of Azure._
+* **functionAppName**: _Name of Function App that will be created. Note: name must be unique in all of Azure._
 
-* The Azure region where the Azure function (and related resources) will be deployed to.
-``` powershell
-$region          = "westeurope"
-```
-
-* Optionally you can also change the name of the Azure Resource group and other resources that are created. Note that Function app and storage account names must be unique across Azure.
-``` powershell
-$resourceGroup   = "rg-sqteamsbridge"
-$storageName     = "stsqteamsbridge$(Get-Random -Max 32767)"
-$functionAppName = "func-sqteamsbridge$(Get-Random -Max 32767)"
-```
 
 #### Run the script
+_Note: Example parmeters below, you may want to change them._
 ``` powershell
-cd src
-.\CreateAzureResourcesAndPublishFunction.ps1
+cd .\src\SonarqubeMSTeamsBridge
+.\CreateAzureResourcesAndPublishFunction.ps1 -region "westus" -resourceGroup "rg-sqteamsbridge" -storageName "stsqteamsbridge$(Get-Random -Max 32767)" -functionAppName "func-sqteamsbridge$(Get-Random -Max 32767)"
 ```
 
 When the script has completed, it will output the **Invoke url** of the Azure Function. 
@@ -91,6 +85,19 @@ Optional settings
 az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "QualityGateStatusExcludeList=SUCCESS"
 az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "Culture=en-US"
 ```
+
+#### Publish Azure Function trigger only
+If you already have a Azure Function resource you want to use instead of creating a new one, or if you update to a newer version of this project, you can use a separate script for this purpose.
+
+Script parameters
+* **functionAppName**: _The name of an existing Azure Function app where the Azure Function trigger in this project will be published to._
+
+_Note: Example parmeter below, change it to an existing Azure Function app name in your Subscription. _
+``` powershell
+cd .\src\SonarqubeMSTeamsBridge
+.\PublishFunctionOnly.ps1 -functionAppName "func-sqteamsbridgeXXXX"
+```
+
 
 ### Manual Azure deployment
 
