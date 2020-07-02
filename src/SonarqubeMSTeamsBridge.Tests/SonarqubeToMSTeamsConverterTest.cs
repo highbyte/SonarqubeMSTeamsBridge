@@ -31,6 +31,7 @@ namespace Highbyte.AzureFunctions.SonarqubeMSTeamsBridgeTests
             
         }
 
+        [Fact]
         public void msteams_card_will_contain_a_potentialaction_with_link_to_sonarqube_portal()
         {
             // Arrange
@@ -47,8 +48,8 @@ namespace Highbyte.AzureFunctions.SonarqubeMSTeamsBridgeTests
             Assert.Equal("Open in Sonarqube", potentialAction.Name);
 
             var potentialActionTarget = potentialAction.Targets[0];
-            Assert.Equal("Default", potentialActionTarget.OS);
-            Assert.Equal(new System.Uri(data.project.url), potentialActionTarget.Uri);
+            Assert.Equal("default", potentialActionTarget.OS);
+            Assert.Equal(new System.Uri((string)data.project.url), potentialActionTarget.Uri);
             
         }        
 
