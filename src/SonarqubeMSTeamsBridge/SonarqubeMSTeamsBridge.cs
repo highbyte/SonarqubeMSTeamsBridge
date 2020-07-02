@@ -23,14 +23,14 @@ namespace Highbyte.AzureFunctions
         
         private readonly HttpClient _httpClient;
         private readonly ISonarqubeSecretValidator _sonarqubeSecretValidator;
-        private readonly ISonarqubeToMSTeamsConvert _sonarqubeToMSTeamsConvert;
+        private readonly ISonarqubeToMSTeamsConverter _sonarqubeToMSTeamsConverter;
         private readonly ISonarqubeToMSTeamsFilter _sonarqubeToMSTeamsFilter;
 
-        public SonarqubeMSTeamsBridge(HttpClient httpClient, ISonarqubeSecretValidator sonarqubeSecretValidator, ISonarqubeToMSTeamsConvert sonarqubeToMSTeamsConvert, ISonarqubeToMSTeamsFilter sonarqubeToMSTeamsFilter)
+        public SonarqubeMSTeamsBridge(HttpClient httpClient, ISonarqubeSecretValidator sonarqubeSecretValidator, ISonarqubeToMSTeamsConverter sonarqubeToMSTeamsConverter, ISonarqubeToMSTeamsFilter sonarqubeToMSTeamsFilter)
         {
             _httpClient = httpClient;
             _sonarqubeSecretValidator = sonarqubeSecretValidator;
-            _sonarqubeToMSTeamsConvert = sonarqubeToMSTeamsConvert;
+            _sonarqubeToMSTeamsConverter = sonarqubeToMSTeamsConverter;
             _sonarqubeToMSTeamsFilter = sonarqubeToMSTeamsFilter;
         }
 
@@ -93,8 +93,8 @@ namespace Highbyte.AzureFunctions
             // ----------------------------------------------------
             // Build MS Teams card from Sonarqube Webhook data 
             // ----------------------------------------------------
-            //var msTeamsCard = _sonarqubeToMSTeamsConvert.ToSimpleCard(sonarqubeRequestJson);
-            var msTeamsCard = _sonarqubeToMSTeamsConvert.ToComplexCard(sonarqubeRequestJson, culture);
+            //var msTeamsCard = _sonarqubeToMSTeamsConverter.ToSimpleCard(sonarqubeRequestJson);
+            var msTeamsCard = _sonarqubeToMSTeamsConverter.ToComplexCard(sonarqubeRequestJson, culture);
 
             // ----------------------------------------------------
             // Send message to MS Teams webhook url

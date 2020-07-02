@@ -18,7 +18,7 @@ namespace Highbyte.AzureFunctions
             // });
 
             builder.Services.AddSingleton<ISonarqubeSecretValidator, SonarqubeSecretValidator>();
-            builder.Services.AddSingleton<ISonarqubeToMSTeamsConvert, SonarqubeToMSTeamsConvert>();
+            builder.Services.AddSingleton<ISonarqubeToMSTeamsConverter, SonarqubeToMSTeamsConverter>();
             builder.Services.AddSingleton<ISonarqubeToMSTeamsFilter, SonarqubeToMSTeamsFilter>();
 
         }

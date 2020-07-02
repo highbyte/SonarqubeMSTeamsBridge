@@ -6,7 +6,7 @@ using Highbyte.AzureFunctions.TestHelpers;
 using Highbyte.AzureFunctions;
 using Moq;
 
-namespace SonarqubeMSTeamsBridgeTests
+namespace Highbyte.AzureFunctions.SonarqubeMSTeamsBridgeTests
 {
     public class SonarqubeMSTeamsBridgeTest
     {
@@ -95,15 +95,15 @@ namespace SonarqubeMSTeamsBridgeTests
                 It.IsAny<string>())
                 ).Returns(true);
 
-            var sonarqubeToMSTeamsConvertMock = new Mock<ISonarqubeToMSTeamsConvert>();
-            sonarqubeToMSTeamsConvertMock.Setup(x => x.ToComplexCard(
+            var sonarqubeToMSTeamsConverterMock = new Mock<ISonarqubeToMSTeamsConverter>();
+            sonarqubeToMSTeamsConverterMock.Setup(x => x.ToComplexCard(
                 It.IsAny<object>(), 
                 It.IsAny<string>())
                 ).Returns(new MSTeamsComplexCard());
 
 
             var httpClient = new HttpClient(new VoidOkHttpMessageHandler());
-            var sonarqubeMSTeamsBridgeFunction =  new SonarqubeMSTeamsBridge(httpClient, sonarqubeSecretValidator.Object, sonarqubeToMSTeamsConvertMock.Object, sonarqubeToMSTeamsFilter.Object);
+            var sonarqubeMSTeamsBridgeFunction =  new SonarqubeMSTeamsBridge(httpClient, sonarqubeSecretValidator.Object, sonarqubeToMSTeamsConverterMock.Object, sonarqubeToMSTeamsFilter.Object);
             ListLogger logger = (ListLogger)TestFactory.CreateLogger(LoggerTypes.List);
             
             // Act
