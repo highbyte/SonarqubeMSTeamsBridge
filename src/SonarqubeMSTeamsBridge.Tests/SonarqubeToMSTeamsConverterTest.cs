@@ -200,11 +200,10 @@ namespace Highbyte.AzureFunctions.SonarqubeMSTeamsBridgeTests
         {
             return JsonConvert.DeserializeObject(File.ReadAllText(@"Example_Webhook_Request_From_Sonarqube_v8.3.1_quality_gate_error.json"));
         }
-
         private dynamic GetExampleSonarqubeQualityGateOtherJson() 
         {
             return JsonConvert.DeserializeObject(File.ReadAllText(@"Example_Webhook_Request_From_Sonarqube_v8.3.1_quality_gate_other.json"));
-        }        
+        }
 
     }
 }
