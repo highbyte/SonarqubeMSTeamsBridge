@@ -6,10 +6,10 @@ using Microsoft.Extensions.Primitives;
 
 namespace Highbyte.AzureFunctions
 {
-    public static class SonarqubeSecretValidator
+    public class SonarqubeSecretValidator: ISonarqubeSecretValidator
     {
-        const string SonarqubeAuthSignatureHeaderName = "X-Sonar-Webhook-HMAC-SHA256";
-        public static bool IsValidSignature(HttpRequest request, string requestBody, string sonarqubeWebhookSecret) 
+        public const string SonarqubeAuthSignatureHeaderName = "X-Sonar-Webhook-HMAC-SHA256";
+        public bool IsValidSignature(HttpRequest request, string requestBody, string sonarqubeWebhookSecret) 
         {
             // Read the header that is sent by Sonarqube, which contains a computed HMAC SHA256 hash based on the request body and a configured secret.
             StringValues headerValues = request.Headers[SonarqubeAuthSignatureHeaderName];
@@ -21,7 +21,7 @@ namespace Highbyte.AzureFunctions
             return object.Equals(expectedSignature, receivedSignature);  
         }
 
-        public static string GetHMACSHA256Hash(string text, string key)
+        public string GetHMACSHA256Hash(string text, string key)
         {
             var encoding = new UTF8Encoding();
 
