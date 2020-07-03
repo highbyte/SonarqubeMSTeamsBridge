@@ -1,9 +1,9 @@
 namespace Highbyte.AzureFunctions
 {
-    public interface ISonarqubeToMSTeamsConvert
+    public interface ISonarqubeToMSTeamsConverter
     {
         public MSTeamsComplexCard ToComplexCard(dynamic data, string culture);
-        public MSTeamsSimpleCard ToSimpleCard(dynamic data);
+        //public MSTeamsSimpleCard ToSimpleCard(dynamic data);
 
     }
 }

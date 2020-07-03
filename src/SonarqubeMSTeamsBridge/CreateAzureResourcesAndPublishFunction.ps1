@@ -1,4 +1,4 @@
-
+param ($region, $resourceGroup, $storageName, $functionAppName)
 # -----------------------------------------------------
 # Script purpose
 # -----------------------------------------------------
@@ -13,17 +13,16 @@
 #   Azure Functions Core Tools: https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local
 
 # -----------------------------------------------------
-# Script settings
+# How to run script
 # -----------------------------------------------------
-# Change to desired Azure region here. 
-# Examples: westeurope, northeurope, eastus, westus, etc.
-$region          = "--Azure region goes here--"
+# Send Azure resource names below to match your existing resources in the parameters to the script.
+# -region           Code for region where resources will be created. Example: "westus", "eastus", "northeurope", "westeurope"
+# -resourceGroup    Name of Resource Group that will be created
+# -storageName      Name of Storage Account that will be created. Note: name must be unique in all of Azure
+# -functionAppName  Name of Function App that will be created. Note: name must be unique in all of Azure
 
-# Change Azure resource names below if you want your own names.
-# Note: Function app and storage account names must be unique across Azure
-$resourceGroup   = "rg-sqteamsbridge"
-$storageName     = "stsqteamsbridge$(Get-Random -Max 32767)"
-$functionAppName = "func-sqteamsbridge$(Get-Random -Max 32767)"
+# Example: 
+# .\CreateAzureResourcesAndPublishFunction.ps1 -region "westus" -resourceGroup "rg-sqteamsbridge" -storageName "stsqteamsbridge$(Get-Random -Max 32767)" -functionAppName "func-sqteamsbridge$(Get-Random -Max 32767)"
 
 # -----------------------------------------------------
 # Create Azure Resources
@@ -33,6 +32,7 @@ $functionAppName = "func-sqteamsbridge$(Get-Random -Max 32767)"
 az group create --name $resourceGroup --location $region
 
 # Create an Azure storage account in the resource group.
+# Uncomment line if you use an existing group.
 az storage account create `
   --name $storageName `
   --location $region `

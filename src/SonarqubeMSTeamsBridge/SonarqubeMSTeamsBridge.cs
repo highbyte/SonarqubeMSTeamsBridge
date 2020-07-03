@@ -14,30 +14,30 @@ namespace Highbyte.AzureFunctions
 {
     public class SonarqubeMSTeamsBridge
     {
-        const string Setting_TeamsWebhookUrl = "TeamsWebhookUrl";
-        const string Setting_SonarqubeWebhookSecret = "SonarqubeWebhookSecret";
-        const string Setting_QualityGateStatusExcludeList = "QualityGateStatusExcludeList";
-        const string Setting_Culture = "Culture";
-        const string Setting_DisableAuthentication = "DisableAuthentication";
+        public const string Setting_TeamsWebhookUrl = "TeamsWebhookUrl"; 
+        public const string Setting_SonarqubeWebhookSecret = "SonarqubeWebhookSecret";
+        public const string Setting_QualityGateStatusExcludeList = "QualityGateStatusExcludeList";
+        public const string Setting_Culture = "Culture";
+        public const string Setting_DisableAuthentication = "DisableAuthentication";
         
         
-
-        // TODO: Inject HttpClient via Azure Function DI. Use .NET Core extension for providing HttpClient correctly (singleton)
-        private static readonly HttpClient _httpClient = new HttpClient();
-        private readonly ISonarqubeToMSTeamsConvert _sonarqubeToMSTeamsConvert;
+        private readonly HttpClient _httpClient;
+        private readonly ISonarqubeSecretValidator _sonarqubeSecretValidator;
+        private readonly ISonarqubeToMSTeamsConverter _sonarqubeToMSTeamsConverter;
         private readonly ISonarqubeToMSTeamsFilter _sonarqubeToMSTeamsFilter;
 
-        public SonarqubeMSTeamsBridge(ISonarqubeToMSTeamsConvert sonarqubeToMSTeamsConvert, ISonarqubeToMSTeamsFilter sonarqubeToMSTeamsFilter)
+        public SonarqubeMSTeamsBridge(HttpClient httpClient, ISonarqubeSecretValidator sonarqubeSecretValidator, ISonarqubeToMSTeamsConverter sonarqubeToMSTeamsConverter, ISonarqubeToMSTeamsFilter sonarqubeToMSTeamsFilter)
         {
-            _sonarqubeToMSTeamsConvert = sonarqubeToMSTeamsConvert;
+            _httpClient = httpClient;
+            _sonarqubeSecretValidator = sonarqubeSecretValidator;
+            _sonarqubeToMSTeamsConverter = sonarqubeToMSTeamsConverter;
             _sonarqubeToMSTeamsFilter = sonarqubeToMSTeamsFilter;
         }
 
         [FunctionName("SonarqubeMSTeamsBridge")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
-            ILogger log,
-            ExecutionContext context)
+            ILogger log)
         {
             log.LogInformation("Request received from Sonarqube webhook.");
 
@@ -73,9 +73,9 @@ namespace Highbyte.AzureFunctions
             // Validate signature in http header
             // ----------------------------------------------------
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            if(!disableAuthentication && !SonarqubeSecretValidator.IsValidSignature(req, requestBody, sonarqubeWebhookSecret))
+            if(!disableAuthentication && !_sonarqubeSecretValidator.IsValidSignature(req, requestBody, sonarqubeWebhookSecret))
             {
-                log.LogWarning($"Sonarqube secret http header is missing or not valid. Config setting {Setting_SonarqubeWebhookSecret} must match secret in Sonarqube Webhook.");
+                log.LogWarning($"Sonarqube secret http header is missing or not valid. Config setting {Setting_SonarqubeWebhookSecret} must match secret in Sonarqube Webhook header {SonarqubeSecretValidator.SonarqubeAuthSignatureHeaderName}.");
                 return new UnauthorizedResult();
             }
 
@@ -93,8 +93,8 @@ namespace Highbyte.AzureFunctions
             // ----------------------------------------------------
             // Build MS Teams card from Sonarqube Webhook data 
             // ----------------------------------------------------
-            //var msTeamsCard = _sonarqubeToMSTeamsConvert.ToSimpleCard(sonarqubeRequestJson);
-            var msTeamsCard = _sonarqubeToMSTeamsConvert.ToComplexCard(sonarqubeRequestJson, culture);
+            //var msTeamsCard = _sonarqubeToMSTeamsConverter.ToSimpleCard(sonarqubeRequestJson);
+            var msTeamsCard = _sonarqubeToMSTeamsConverter.ToComplexCard(sonarqubeRequestJson, culture);
 
             // ----------------------------------------------------
             // Send message to MS Teams webhook url
