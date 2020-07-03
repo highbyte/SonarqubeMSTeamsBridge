@@ -22,19 +22,19 @@ There was no Sonarqube plugin for integration with MS Teams when I checked. As I
 You deploy this Azure Function to your own Azure Subscription.
 
 ### Deployment via script
-There is a provided Powershell script ([src/SonarqubeMSTeamsBridge/CreateAzureResourcesAndPublishFunction.ps1](src/SonarqubeMSTeamsBridge/CreateAzureResourcesAndPublishFunction.ps1)) that creates necessary Azure resources, and compiles/uploads the Azure function project in this repository.
+There is a provided Powershell script (Windows) ([src/SonarqubeMSTeamsBridge/CreateAzureResourcesAndPublishFunction.ps1](src/SonarqubeMSTeamsBridge/CreateAzureResourcesAndPublishFunction.ps1)) or Bash script (Linux) ([src/SonarqubeMSTeamsBridge/CreateAzureResourcesAndPublishFunction.sh](src/SonarqubeMSTeamsBridge/CreateAzureResourcesAndPublishFunction.sh)) that creates necessary Azure resources, and compiles/uploads the Azure function project in this repository.
 
-The Powershell script requires the following command line tools to be installed on the machine you run it from
+The scripts requires the following command line tools to be installed on the machine you run it from, on either Windows or Linux.
 * [Azure CLI (az)](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest)
 * [Azure Functions Core Tools (func)](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local)
 
 #### Login to Azure via the CLI tool
-``` powershell
+```
 az login
 ```
 
 #### Set current Subscription (if you have more than one)
-``` powershell
+```
 az account set --subscription [your_subscription_id_or_name_here] 
 ```
 
@@ -48,9 +48,16 @@ When running the script, you need to provide the following parameters
 
 #### Run the script
 _Note: Example parmeters below, you may want to change them._
+
+_Powershell on Windows_
 ``` powershell
 cd .\src\SonarqubeMSTeamsBridge
 .\CreateAzureResourcesAndPublishFunction.ps1 -region "westus" -resourceGroup "rg-sqteamsbridge" -storageName "stsqteamsbridge$(Get-Random -Max 32767)" -functionAppName "func-sqteamsbridge$(Get-Random -Max 32767)"
+```
+_Bash on Linux_
+``` bash
+cd ./src/SonarqubeMSTeamsBridge
+./CreateAzureResourcesAndPublishFunction.sh "westus" "rg-sqteamsbridge" "stsqteamsbridge$RANDOM" "func-sqteamsbridge$RANDOM"
 ```
 
 When the script has completed, it will output the **Invoke url** of the Azure Function. 
@@ -75,27 +82,35 @@ func-sqteamsbridgeXXXXX  rg-sqteamsbridge  westeurope   Microsoft.Web/sites
 Azure Function settings can be set via script. Change Azure resource names and values. Read [here](#azure-function-settings) about each setting.
 
 Required settings
-``` powershell
+```
 az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "TeamsWebhookUrl=https://outlook.office.com/webhook/XXXX"
 az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "SonarqubeWebhookSecret=MY_SECRET"
 ```
 
 Optional settings
-``` powershell
+```
 az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "QualityGateStatusExcludeList=SUCCESS"
 az functionapp config appsettings set --name "func-sqteamsbridgeXXXXX" --resource-group "rg-sqteamsbridge" --settings "Culture=en-US"
 ```
 
 #### Publish Azure Function trigger only
-If you already have a Azure Function resource you want to use instead of creating a new one, or if you update to a newer version of this project, you can use a separate script for this purpose.
+If you already have a Azure Function resource you want to use instead of creating a new one, or if you update to a newer version of this project, you can use a separate script for this purpose. See ([src/SonarqubeMSTeamsBridge/PublishFunctionOnly.ps1](src/SonarqubeMSTeamsBridge/PublishFunctionOnly.ps1)) or ([src/SonarqubeMSTeamsBridge/PublishFunctionOnly.sh](src/SonarqubeMSTeamsBridge/PublishFunctionOnly.sh))
 
 Script parameters
 * **functionAppName**: _The name of an existing Azure Function app where the Azure Function trigger in this project will be published to._
 
-_Note: Example parmeter below, change it to an existing Azure Function app name in your Subscription. _
+_Note: Example parmeter below, change it to an existing Azure Function app name in your Subscription._
+
+_Powershell on Windows_
 ``` powershell
 cd .\src\SonarqubeMSTeamsBridge
 .\PublishFunctionOnly.ps1 -functionAppName "func-sqteamsbridgeXXXX"
+```
+
+_Bash on Linux_
+``` bash
+cd ./src/SonarqubeMSTeamsBridge
+./PublishFunctionOnly.sh "func-sqteamsbridgeXXXX"
 ```
 
 
@@ -110,7 +125,7 @@ As an alternative to deployment via script (as described above), Visual Studio C
   * Select Function App in Azure: **Create new Function App in Azure... Advanced** _(or use an existing Function App if you like)_
   * Enter a globally unique name for the function app. _(will used in host name [function app name].azurewebsites.net)_
   * Select Runtime: **.NET Core 3.1**
-  * Select an OS: **Windows** _(Linux probably also works, but not tested)_
+  * Select an OS: **Windows** _(Linux also works)_
   * Select a hosting plan: _Refer to Microsoft [documentation](https://azure.microsoft.com/en-us/pricing/details/functions/) about this. The simplest is Consumption_
   * Select a resource group for new resources: _Create a new resource group, or use an exisiting, it's up to you._
   * Select a storage account: _Create a new storage account, or use an exisiting, it's up to you._
