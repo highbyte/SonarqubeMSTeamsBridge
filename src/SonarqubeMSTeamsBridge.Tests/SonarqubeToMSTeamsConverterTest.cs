@@ -68,7 +68,7 @@ namespace Highbyte.AzureFunctions.SonarqubeMSTeamsBridgeTests
             // Assert
             Assert.Equal("00FF00", msTeamsComplexCard.ThemeColor);
             var section =  msTeamsComplexCard.Sections[0];
-            Assert.Equal(SonarqubeToMSTeamsConverter.ActivityImageSuccess, section.ActivityImage);
+            Assert.Equal(SonarqubeToMSTeamsConverter.GetActivityImageSuccess() , section.ActivityImage);
             Assert.Contains("succeeded", section.ActivityTitle);
             Assert.Contains((string)data.qualityGate.status, section.ActivitySubtitle);
         }
@@ -87,7 +87,7 @@ namespace Highbyte.AzureFunctions.SonarqubeMSTeamsBridgeTests
             // Assert
             Assert.Equal("FF0000", msTeamsComplexCard.ThemeColor);
             var section =  msTeamsComplexCard.Sections[0];
-            Assert.Equal(SonarqubeToMSTeamsConverter.ActivityImageFailure, section.ActivityImage);
+            Assert.Equal(SonarqubeToMSTeamsConverter.GetActivityImageFailure(), section.ActivityImage);
             Assert.Contains("failed", section.ActivityTitle);
             Assert.Contains((string)data.qualityGate.status, section.ActivitySubtitle);
         }           
@@ -106,7 +106,7 @@ namespace Highbyte.AzureFunctions.SonarqubeMSTeamsBridgeTests
             // Assert
             Assert.Equal("FFFF00", msTeamsComplexCard.ThemeColor);
             var section =  msTeamsComplexCard.Sections[0];
-            Assert.Equal(SonarqubeToMSTeamsConverter.ActivityImageInconclusive, section.ActivityImage);
+            Assert.Equal(SonarqubeToMSTeamsConverter.GetActivityImageInconclusive(), section.ActivityImage);
             Assert.Contains("inconclusive", section.ActivityTitle);
             Assert.Contains((string)data.qualityGate.status, section.ActivitySubtitle);
         }
