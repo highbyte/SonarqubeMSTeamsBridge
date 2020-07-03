@@ -23,6 +23,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
+    arguments: '--collect "Code coverage"'
     workingDirectory: 'src'
 - task: SonarCloudAnalyze@1
 - task: SonarCloudPublish@1
