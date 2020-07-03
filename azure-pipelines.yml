@@ -25,11 +25,12 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
+    arguments: '--no-restore --configuration Release'
     workingDirectory: 'src'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-    arguments: '--collect "Code coverage"'
+    arguments: '--no-restore --collect "Code coverage"'
     workingDirectory: 'src'
 - task: SonarCloudAnalyze@1
 - task: SonarCloudPublish@1
