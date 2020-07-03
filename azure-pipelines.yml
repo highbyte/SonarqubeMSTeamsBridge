@@ -16,6 +16,12 @@ steps:
     scannerMode: 'MSBuild'
     projectKey: 'highbyte_SonarqubeMSTeamsBridge'
     projectName: 'SonarqubeMSTeamsBridge'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: 'src'
+    feedsToUse: 'select'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
