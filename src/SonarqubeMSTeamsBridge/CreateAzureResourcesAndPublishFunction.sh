@@ -1,4 +1,9 @@
-param ($region, $resourceGroup, $storageName, $functionAppName)
+#!/bin/bash
+region=$1
+resourceGroup=$2
+storageName=$3
+functionAppName=$4
+
 # -----------------------------------------------------
 # Script purpose
 # -----------------------------------------------------
@@ -16,13 +21,13 @@ param ($region, $resourceGroup, $storageName, $functionAppName)
 # How to run script
 # -----------------------------------------------------
 # Send Azure resource names below to match your existing resources in the parameters to the script.
-# -region           Code for region where resources will be created. Example: "westus", "eastus", "northeurope", "westeurope"
-# -resourceGroup    Name of Resource Group that will be created
-# -storageName      Name of Storage Account that will be created. Note: name must be unique in all of Azure
-# -functionAppName  Name of Function App that will be created. Note: name must be unique in all of Azure
+# -arg #1     Code for region where resources will be created. Example: "westus", "eastus", "northeurope", "westeurope"
+# -arg #2     Name of Resource Group that will be created
+# -arg #3     Name of Storage Account that will be created. Note: name must be unique in all of Azure
+# -arg #4     Name of Function App that will be created. Note: name must be unique in all of Azure
 
 # Example: 
-# .\CreateAzureResourcesAndPublishFunction.ps1 -region "westus" -resourceGroup "rg-sqteamsbridge" -storageName "stsqteamsbridge$(Get-Random -Max 32767)" -functionAppName "func-sqteamsbridge$(Get-Random -Max 32767)"
+# ./CreateAzureResourcesAndPublishFunction.sh "westus" "rg-sqteamsbridge" "stsqteamsbridge$RANDOM" "func-sqteamsbridge$RANDOM"
 
 # -----------------------------------------------------
 # Create Azure Resources
@@ -33,21 +38,21 @@ az group create --name $resourceGroup --location $region
 
 # Create an Azure storage account in the resource group.
 # Uncomment line if you use an existing group.
-az storage account create `
-  --name $storageName `
-  --location $region `
-  --resource-group $resourceGroup `
+az storage account create \
+  --name $storageName \
+  --location $region \
+  --resource-group $resourceGroup \
   --sku Standard_LRS
 
 # Create a serverless function app in the resource group.
 # The .NET Core 3.1 HttpTrigger function we'll deploy works on --os-type either Windows or Linux
-az functionapp create `
-  --name $functionAppName `
-  --storage-account $storageName `
-  --consumption-plan-location $region `
-  --resource-group $resourceGroup `
-  --os-type "Windows" `
-  --runtime "dotnet" `
+az functionapp create \
+  --name $functionAppName \
+  --storage-account $storageName \
+  --consumption-plan-location $region \
+  --resource-group $resourceGroup \
+  --os-type "Windows" \
+  --runtime "dotnet" \
   --functions-version 3
 
 # -----------------------------------------------------
