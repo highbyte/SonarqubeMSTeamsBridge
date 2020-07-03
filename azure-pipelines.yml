@@ -20,6 +20,10 @@ steps:
   inputs:
     command: 'build'
     workingDirectory: 'src'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    workingDirectory: 'src'
 - task: SonarCloudAnalyze@1
 - task: SonarCloudPublish@1
   inputs:
