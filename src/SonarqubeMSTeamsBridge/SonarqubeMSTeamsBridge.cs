@@ -93,7 +93,6 @@ namespace Highbyte.AzureFunctions
             // ----------------------------------------------------
             // Build MS Teams card from Sonarqube Webhook data 
             // ----------------------------------------------------
-            //var msTeamsCard = _sonarqubeToMSTeamsConverter.ToSimpleCard(sonarqubeRequestJson);
             var msTeamsCard = _sonarqubeToMSTeamsConverter.ToComplexCard(sonarqubeRequestJson, culture);
 
             // ----------------------------------------------------

@@ -1,3 +1,4 @@
+
 using System;
 using System.Globalization;
 
@@ -5,10 +6,9 @@ namespace Highbyte.AzureFunctions
 {
     public class SonarqubeToMSTeamsConverter: ISonarqubeToMSTeamsConverter
     {
-        public static System.Uri ActivityImageSuccess = new System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flat_tick_icon.svg/200px-Flat_tick_icon.svg.png");
-        public static System.Uri ActivityImageFailure = new System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Dialog-error.svg/200px-Dialog-error.svg.png");
-        public static System.Uri ActivityImageInconclusive = new System.Uri("https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Emblem-question-yellow.svg/200px-Emblem-question-yellow.svg.png");
-
+        const string Setting_IconUrl_OK = "IconUrl_OK";
+        const string Setting_IconUrl_ERROR = "IconUrl_ERROR";
+        const string Setting_IconUrl_other = "IconUrl_other";
         public MSTeamsComplexCard ToComplexCard(dynamic data, string culture)
         {
             string taskStatus = data.status;                         // SUCCESS, IN_PROGRESS (should never occur in webhook?)
@@ -40,17 +40,17 @@ namespace Highbyte.AzureFunctions
                 case "OK":
                     themeColor="00FF00";    // Green
                     qualityGateResultText = "succeeded";
-                    activityImage = ActivityImageSuccess;
+                    activityImage = GetActivityImageSuccess();
                     break;
                 case "ERROR": 
                     themeColor="FF0000";    // Red
                     qualityGateResultText = "_failed_";
-                    activityImage = ActivityImageFailure;
+                    activityImage = GetActivityImageFailure();
                     break;
                 default:    // Unkown quality gate status
                     themeColor="FFFF00";    // Yellow
                     qualityGateResultText = "was inconclusive";
-                    activityImage = ActivityImageInconclusive;
+                    activityImage = GetActivityImageInconclusive();
                     break;
             }
 
@@ -114,20 +114,26 @@ namespace Highbyte.AzureFunctions
             return msTeamsComplexCard;
         }
 
-        // public MSTeamsSimpleCard ToSimpleCard(dynamic data)
-        // {
-        //     string taskStatus = data.status;                // SUCCESS, IN_PROGRESS (should never occur in webhook?)
-        //     string projectName = data.project.name;
-        //     string qualityGateStatus = data.qualityGate.status; // SUCCESS, ERROR
-
-        //     var msTeamsSimpleCard = new MSTeamsSimpleCard
-        //     {
-        //         Title = $"Sonarqube project {projectName} was analyzed (task status {taskStatus})",
-        //         Text = $"Quality Gate Status: {qualityGateStatus}"
-        //     };
-
-        //     return msTeamsSimpleCard;
-        // }
-
+        public static System.Uri GetActivityImageSuccess()
+        {
+            var url = Environment.GetEnvironmentVariable(Setting_IconUrl_OK, EnvironmentVariableTarget.Process);
+            if(string.IsNullOrEmpty(url))
+                url = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flat_tick_icon.svg/200px-Flat_tick_icon.svg.png";
+            return new System.Uri(url);
+        }
+        public static System.Uri GetActivityImageFailure()
+        {
+            var url = Environment.GetEnvironmentVariable(Setting_IconUrl_ERROR, EnvironmentVariableTarget.Process);
+            if(string.IsNullOrEmpty(url))
+                url = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Dialog-error.svg/200px-Dialog-error.svg.png";
+            return new System.Uri(url);
+        }
+        public static System.Uri GetActivityImageInconclusive()
+        {
+            var url = Environment.GetEnvironmentVariable(Setting_IconUrl_other, EnvironmentVariableTarget.Process);
+            if(string.IsNullOrEmpty(url))
+                url = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Emblem-question-yellow.svg/200px-Emblem-question-yellow.svg.png";
+            return new System.Uri(url);
+        }        
     }
 }
