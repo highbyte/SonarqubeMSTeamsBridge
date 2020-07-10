@@ -1,22 +1,22 @@
-# Sonarqube MS Teams Bridge
+# SonarQube MS Teams Bridge
 
 ![Build .NET Core](https://github.com/highbyte/SonarqubeMSTeamsBridge/workflows/Build%20.NET%20Core/badge.svg)
 [![SonarCloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=alert_status)](https://sonarcloud.io/dashboard?id=highbyte_SonarqubeMSTeamsBridge) [![SonarCloud Security Rating](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=security_rating)](https://sonarcloud.io/dashboard?id=highbyte_SonarqubeMSTeamsBridge) [![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=vulnerabilities)](https://sonarcloud.io/project/issues?id=highbyte_SonarqubeMSTeamsBridge&resolved=false&types=VULNERABILITY) [![SonarCloud Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=highbyte_SonarqubeMSTeamsBridge) [![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=bugs)](https://sonarcloud.io/project/issues?id=highbyte_SonarqubeMSTeamsBridge&resolved=false&types=BUG) [![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=highbyte_SonarqubeMSTeamsBridge&metric=coverage)](https://sonarcloud.io/component_measures?id=highbyte_SonarqubeMSTeamsBridge&metric=coverage&view=list)
 
 ## What
-Allows [Sonarqube](https://www.sonarqube.org/) scan results to be shown in a [MS Teams](https://teams.microsoft.com/start) channel.
+Allows [SonarQube](https://www.sonarqube.org/) scan results to be shown in a [MS Teams](https://teams.microsoft.com/start) channel.
 
 <img src="doc/MSTeams_cards.png" width="75%" height="75%" title="MS Teams card example">
 
 ## How
-An [Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/) written in .NET Core v3.1 (C#) that processes incoming [Sonarqube Webhook](https://docs.sonarqube.org/latest/project-administration/webhooks/) requests, and transforms them to a MS Teams "card" that's sent to a MS Teams channel via a [MS Teams Webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook).
+An [Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/) written in .NET Core v3.1 (C#) that processes incoming [SonarQube Webhook](https://docs.sonarqube.org/latest/project-administration/webhooks/) requests, and transforms them to a MS Teams "card" that's sent to a MS Teams channel via a [MS Teams Webhook](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook).
 
 Tested with (it way work for other versions)
-* Sonarqube (Community) v8.3.1.34397
+* SonarQube (Community) v8.3.1.34397
 * MS Teams (Free) v1.3.00.13565
 
 ## Why
-There was no Sonarqube plugin for integration with MS Teams when I checked. As I'm not sufficiently proficient in Java to implement a proper Sonarqube plugin, so I did the simplest thing possible for myself to provide the functionallity.
+There was no SonarQube plugin for integration with MS Teams when I checked. As I'm not sufficiently proficient in Java to implement a proper Sonarqube plugin, so I did the simplest thing possible for myself to provide the functionallity.
 
 ## Deployment to Azure
 You deploy this Azure Function to your own Azure Subscription.
