@@ -24,7 +24,7 @@ jobs:
       with:
         fetch-depth: '0'
     - name: sonarscan-dotnet
-      uses: highbyte/sonarscan-dotnet@1.0
+      uses: highbyte/sonarscan-dotnet@1.0.2
       with:
         # The key of the SonarQube project
         sonarProjectKey: highbyte_SonarqubeMSTeamsBridge
