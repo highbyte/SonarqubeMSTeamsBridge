@@ -24,11 +24,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: '0'
     - name: sonarscan-dotnet
-      uses: highbyte/sonarscan-dotnet@1.0.2
+      uses: highbyte/sonarscan-dotnet@v2.3.1
       with:
         # The key of the SonarQube project
         sonarProjectKey: highbyte_SonarqubeMSTeamsBridge
