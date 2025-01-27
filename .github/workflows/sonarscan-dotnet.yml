@@ -28,13 +28,8 @@ jobs:
       with:
         fetch-depth: '0'
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 3.1.x
-
     - name: sonarscan-dotnet
-      uses: highbyte/sonarscan-dotnet@v2.3.1
+      uses: highbyte/sonarscan-dotnet@v2.3.3
       with:
         # The key of the SonarQube project
         sonarProjectKey: highbyte_SonarqubeMSTeamsBridge
